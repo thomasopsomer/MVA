@@ -1,0 +1,35 @@
+# MVA
+
+## Course
+
+- Graph in Machine Learning
+- Reinforcement Learning
+- Object Recogniation and Computer Vision
+- Sparse Representations, Wavelets and Classification
+
+
+## Graphs in Machine Learning
+
+[Course website](http://researchers.lille.inria.fr/~valko/hp/mva-ml-graphs.php)
+
+[Piazza](https://piazza.com/ens-cachan.fr/fall2016/mvagraphsml)
+
+
+## Reinforcement Learning
+
+[course website](http://researchers.lille.inria.fr/~lazaric/Webpage/Teaching.html)
+
+
+## Object recognition and computer vision
+
+[Course website](http://www.di.ens.fr/willow/teaching/recvis16/)
+
+##### Assignments
+
+- Assignment 1: Instance-level recognition - Due to 02/11
+	see [here](http://www.di.ens.fr/willow/teaching/recvis16/assignment1/)
+
+
+## Sparse Representations, Wavelets and Classification
+
+[Course website](http://www.di.ens.fr/~mallat/coursMVA2016.html)
