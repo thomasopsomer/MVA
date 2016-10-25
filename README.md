@@ -19,6 +19,11 @@
 
 [course website](http://researchers.lille.inria.fr/~lazaric/Webpage/Teaching.html)
 
+#### TPs
+[website](http://chercheurs.lille.inria.fr/ekaufman/teaching.html)
+
+	- TP1: Dynamic Programming and Reinforcement Learning (due for 13/11/2016)
+
 
 ## Object recognition and computer vision
 
