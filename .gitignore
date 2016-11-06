@@ -1,0 +1,13 @@
+.DS_Store
+*.pdf
+*.zip
+*.gz
+*.tar
+
+# recvis
+*/data/
+/data
+*/vlfeat
+/vlfeat
+*/doc/
+/doc
