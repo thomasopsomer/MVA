@@ -19,6 +19,22 @@
 
 - TP1: Spectral Clustering (due to 7/11/2015)
 
+#### Project (review, or more :) 
+
+##### Deadline 
+
+- finding project 21/11
+
+- report 05/01 then presentation...
+
+##### Ideas
+
+- DeepWalks (Graph embedding with random walks and skip-gram)
+see [paper](https://arxiv.org/pdf/1403.6652v2.pdf) and [code](https://github.com/phanein/deepwalk)
+
+- Graph Autoencoders with neural networks, contact: (florian.strub@inria.fr)
+
+- Using existing graph to learn a metric enabling to build more distinctive graph.
 
 ## Reinforcement Learning
 
