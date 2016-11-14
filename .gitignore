@@ -8,12 +8,12 @@
 *.iso
 
 # recvis
-*/data/
+**/data/
 /data
-*/vlfeat
+**/vlfeat
 /vlfeat
-*/doc/
+**/doc/
 /doc
 
 # graph
-*/shared
+**/shared

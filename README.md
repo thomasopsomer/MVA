@@ -19,6 +19,9 @@
 
 - TP1: Spectral Clustering (due to 7/11/2015)
 
+- TP2: Face Recognition (due to 28/11/2015)
+
+
 #### Project (review, or more :) 
 
 ##### Deadline 
@@ -57,6 +60,9 @@ see [paper](https://arxiv.org/pdf/1403.6652v2.pdf) and [code](https://github.com
 
 - Assignment 2: Image classification - Due to 08/11
 	see [here](http://www.di.ens.fr/willow/teaching/recvis16/assignment2/)
+
+- Assignment 3: Neural networks
+	see [here](http://www.di.ens.fr/willow/teaching/recvis16/assignment3/)
 
 
 ## Sparse Representations, Wavelets and Classification
