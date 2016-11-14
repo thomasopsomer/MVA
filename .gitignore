@@ -3,6 +3,7 @@
 *.zip
 *.gz
 *.tar
+*.log
 
 # recvis
 */data/
