@@ -4,6 +4,8 @@
 *.gz
 *.tar
 *.log
+*.ova
+*.iso
 
 # recvis
 */data/
