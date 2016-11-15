@@ -48,6 +48,8 @@ see [paper](https://arxiv.org/pdf/1403.6652v2.pdf) and [code](https://github.com
 
 - TP1: Dynamic Programming and Reinforcement Learning (due for 13/11/2016)
 
+- TP2: Q-Learning / Stochastic Bandit algorithms (due for 27/11/2016)
+
 
 ## Object recognition and computer vision
 
