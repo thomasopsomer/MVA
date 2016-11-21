@@ -1,0 +1,324 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% University/School Laboratory Report
+% LaTeX Template
+% Version 3.1 (25/3/14)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Linux and Unix Users Group at Virginia Tech Wiki 
+% (https://vtluug.org/wiki/Example_LaTeX_chem_lab_report)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+%\documentclass{article}
+\documentclass[a4paper,11pt]{exam}
+
+
+\usepackage[version=3]{mhchem} % Package for chemical equation typesetting
+\usepackage{siunitx} % Provides the \SI{}{} and \si{} command for typesetting SI units
+\usepackage{graphicx} % Required for the inclusion of images
+\usepackage{natbib} % Required to change bibliography style to APA
+\usepackage{amsmath} % Required for some math elements 
+\usepackage{float}
+\usepackage{amsfonts}
+\usepackage{bbold}
+\usepackage{diagbox}
+\usepackage{listings}
+\usepackage{subfig}
+
+
+\printanswers
+\setlength\parindent{0pt} % Removes all indentation from paragraphs
+
+\renewcommand{\labelenumi}{\alph{enumi}.} % Make numbering in the enumerate environment by letter rather than number (e.g. section 6)
+
+\usepackage{titlesec}
+
+
+%\usepackage{times} % Uncomment to use the Times New Roman font
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{Assignment 3:Neural Networks \\ Object recognition and computer vision} % Title
+\author{Thomas \textsc{Opsomer}} % Author name
+
+\date{\today} % Date for the report
+
+\begin{document}
+
+\maketitle % Insert the title, author and date
+
+
+%----------------------------------------------------------------------------------------
+%	Assignments 2
+%----------------------------------------------------------------------------------------
+
+%----------------------------------------------------------------------------------------
+%	Part I
+%----------------------------------------------------------------------------------------
+
+\section{Training a neural network by back-propagation}
+
+\subsection{Computing gradients of the loss with respect to network parameters}
+
+\textbf{QA:In your report, derive using the chain rule the form of the gradient of the logistic loss (4) with respect to the parameters of the network Wi , Wo , Bi and Bo.\\}
+
+To compute the gradient of s, we have to compute those 4 derivatives :
+$\frac{\partial s}{\partial W_i}$,
+$\frac{\partial s}{\partial B_i}$,
+$\frac{\partial s}{\partial W_o}$,
+$\frac{\partial s}{\partial B_o}$
+
+Using the chain rule we have:
+\[
+\frac{\partial s}{\partial W_i}
+   = \frac{\partial s}{\partial \bar{Y}} \frac{\partial \bar{Y}}{\partial H} \frac{\partial H}{\partial W_i}
+\text{, }
+\frac{\partial s}{\partial B_i}
+   = \frac{\partial s}{\partial \bar{Y}} \frac{\partial \bar{Y}}{\partial H} \frac{\partial H}{\partial B_i}
+\]
+\[
+\frac{\partial s}{\partial W_o}
+   = \frac{\partial s}{\partial \bar{Y}} \frac{\partial \bar{Y}}{\partial W_o}
+\text{, }
+\frac{\partial s}{\partial B_o}
+   = \frac{\partial s}{\partial \bar{Y}} \frac{\partial \bar{Y}}{\partial B_o}
+\]
+
+Then we compute each small partial derivative.
+
+\[
+\frac{\partial s}{\partial \bar{Y}}
+   = \frac{Y}{1 + \exp(Y\bar{Y})}
+\text{, }
+\frac{\partial \bar{Y}}{\partial H}
+   = W_o
+\]
+\[
+\frac{\partial \bar{Y}}{\partial W_o}
+   = H
+\text{, } 
+\frac{\partial \bar{Y}}{\partial B_o}
+   = 1
+\]
+\[
+\frac{\partial \bar{H}}{\partial W_i}
+   = \mathbb 1_{\{W_iX + Bi > 0\}} * X'
+\text{, } 
+\frac{\partial \bar{Y}}{\partial B_i}
+   = \mathbb 1_{\{W_iX + Bi > 0\}}
+\]
+That leads us to the different composant of the loss gradient:
+
+\[
+\frac{\partial s}{\partial W_i} =
+	\frac{Y}{1 + \exp(Y\bar{Y})} \cdot W_o \cdot \mathbb 1_{\{W_iX + B_i > 0\}} * X'
+\]
+\[
+\frac{\partial s}{\partial B_i} =
+	\frac{Y}{1 + \exp(Y\bar{Y})} \cdot W_o \cdot  \mathbb 1_{\{W_iX + B_i > 0\}}
+\]
+\[
+\frac{\partial s}{\partial W_o} =
+	\frac{Y}{1 + \exp(Y\bar{Y})}  \cdot ReLU(W_iX + B_i)
+\]
+\[
+\frac{\partial s}{\partial B_o} =
+	\frac{Y}{1 + \exp(Y\bar{Y})}
+\]
+with $\bar{Y} = W_o * ReLU(W_iX + B_i) + B_o$
+
+\subsection{Numerically verify the gradients}
+
+\textbf{QB1: In your report, write down the general formula for numerically computing the approximate derivative of the loss , with respect to the parameter  using finite differencing.\\}
+
+Using the Taylor formula we have at the first order:
+
+\[
+f(\theta + \delta(\theta)) = f(\theta) + \delta(\theta) \cdot \nabla(f) + o(\delta(\theta))
+\]
+\[
+\text{with } \nabla(f) \text{ the vector of coordinate } \frac{\partial f}{\partial \theta_{i}}
+\]
+Consequently we can compute a good numeric approximation of the derivative of $f$ in respect of the $i$ dimension by looking at the difference of $f$ in the direction $i$ for a $\delta$ small enough:
+\[
+\frac{\partial(f)}{\partial \theta_{i}} = \frac{f(\theta + \delta e_{i}) - f(\theta) }{\delta}
+\]
+\textbf{QB2: In your report, choose a training example {X,Y} and report the values of the analytically computed gradients :  grad\_s\_Wi, grad\_s\_Wo, grad\_s\_bi, grad\_s\_bo as well as their numerically computed counterparts: grad\_s\_Wi\_approx, grad\_s\_Wo\_approx, grad\_s\_bi\_approx, grad\_s\_bo\_approx. Are their values similar?\\}
+
+\subsection{Training the network using backpropagation and experimenting with different parameters}
+
+\textbf{QC1: Include the decision hyper-plane visualization and the training and validation error plots in your report. What are the final training and validation errors? After how many iterations did the network converge?\\}
+
+Figure \ref{hyperplane} shows the final decision hyper-plane after 30 iterations over the dataset. Looking at figure \ref{error} showing error evolution on both training and test set, we see that after 10 iteration has reached a good level of convergence. (dataset size is 1000, so one iteration consist of a pass on 1000 datapoint)\\ 
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=13cm]{figures/hyperplane.eps}
+\caption{Decision hyper-plane on the two moons dataset using one hidden layer with 7 hidden unit and  a learning rate of 0.2}    
+\label{hyperplane}
+\end{figure}
+
+\begin{figure}[!h]%
+    \centering
+    \subfloat[]{{\includegraphics[width=6.5cm]{figures/train_err.eps} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=6.5cm]{figures/val_err.eps} }}%
+    \caption{Evolution of error on the training set on the left (a)\\
+     and  on the validation set (b).}%
+    \label{error}%
+\end{figure}
+
+\textbf{QC2: Random initializations. Repeat this procedure 5 times from 5 different random initializations. Record for each run the final training and validation errors. Did the network always converge to zero training error?\\}
+
+Here we show in the following table error obtain on 5 different run of the classification algorithm. We see that most of the time the network converges, however to it can get stuck: for instance on the 5th run, it didn't converged and stayed at about 9\% of error in the validation set. 
+\begin{center}
+\begin{tabular}{ c | c | c }
+	\# run & train error & test error \\
+	\hline
+	   1 & 0.0010 & 0\\
+           2 & 0 & 0\\
+         3 & 0 & 0\\
+         4 & 0 & 0\\
+    	 5 & 0.0730 & 0.0920\\
+	 \hline
+\end{tabular}
+\end{center}
+
+\textbf{QC3: Learning rate. Keep h=7 and change the learning rate to values $lrate = {2, 0.2, 0.02, 0.002}$. For each of these values run the training procedure 3 times and observe the training behaviour. For each run and the value of the learning rate report: the final (i) training and (ii) validation errors, and (iii) after how many iterations the network converged (if at all). Visualize the decision hyperplane and the evolution of the training error for each value of the learning (here only one of the three runs is sufficient). Briefly discuss the different behaviour of the training for different learning rates.\\}
+
+The influence of the learning rate is showed on figure \ref{lrate_influence}, and numeric results in the following table. We observe that for learning rate to big or to small the network didn't reach convergence. In big learning rate configuration, we see that the network oscillate between two value, this is due to gradient descent step being to big, we never reach the "hollow of the valley". On the opposite when the learning rate is very small, we don't reach convergence neither. Even if the error is still decreasing, steps are two small, we are never gonna find the minimum. The other value of 0.2 and 0.02, allows the network to converge, however we see that picking the best value (here 0.2) allows to converge much faster (7 iterations rather than 31 iterations), it is much more time and computationally efficient.
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=15cm]{figures/lrate_influence.eps}
+\caption{Influence of learning rate on network convergence. Error on test set in function of number of iterations}    
+\label{lrate_influence}
+\end{figure}
+
+
+\begin{center}
+\begin{tabular}{c |  c | c | c }
+	\# lrate & final train error & final test error & converge step \\
+	\hline
+	   2 & 0.4760 & 0.4840 & - \\
+           0.2 & 0 & 0 & 7\\
+           0.02 & 0 & 0 & 31\\
+           0.002 & 0.07 & 0.0810 & -\\
+	 \hline
+\end{tabular}
+\end{center}
+
+
+
+\textbf{QC4: The number of hidden units. Set the learning rate to 0.02 and change the number of hidden units $h = {1, 2, 5, 7, 10, 100}$. For each of these values run the training procedure 3 times and observe the training behaviour. For each run and the value of the number of hidden units record and report: the value of the final (i) training and (ii) validation error, and (iii) after how many iterations the network converged (if at all). Show the plot of the final decision hyperplane for each value of h (only one of the three plots for each h is sufficient). Discuss the different behaviours for the different numbers of hidden units.\\}
+
+Using to few hidden unit doesn't give the freedom to the network to learn correctly the right frontier that split correctly the dataset. Here we seen that we need at least 5 hidden unit to make the model converge.
+Looking at the decision hyperplane for various number (cf figure \ref{h_hyp}) of hidden unit shows that starting at $h = 5$ the decision frontier correctly split the dataset but in a more rectilign fashion, whereas giving the network more hidden unit make it more flexible and round. However we see that the using to much hidden unit doesn't really improve the decision, but make it just smoothier and it may not be worth it to pay too much computation for that.
+Concerning the influence of the number of unit on the convergence speed, we see that hidden layer with many hidden unit seems to converge faster in term of iterations during the first iterations. However using more unit increase the amount computation and consequently slow the learning.
+
+\begin{center}
+\begin{tabular}{ c | c |  c | c | c }
+	\#run & h & final train error & final test error & converge step \\
+	\hline
+	   1 & 1 & 0.0890 & 0. 1140 & - \\  
+	   2 & 1 & 0.0930 &  0.1150 & - \\
+	   3 & 1 & 0.0980 & 0.1180 & - \\
+	   \hline
+	   1 & 2 & 0.0870 & 0.1120 & - \\
+	   2 & 2 & 0.0930 & 0.1120 & - \\
+	   3 & 2 & 0.0860 & 0.1070 & - \\
+	   \hline
+	   1 & 5 & 0.0010 & 0 & 23 \\
+	   2 & 5 & 0 & 0 & 25 \\
+	   3 & 5 & 0.0830 & 0.0780 & - \\
+	   \hline
+	   1 & 7 & 0 & 0 & 17 \\
+	   2 & 7 & 0 & 0 &  13 \\
+	   3 & 7 & 0.0610 & 0.0770 & - \\
+	   \hline
+	   1 & 10 & 0 & 0 & 19 \\
+	   2 & 10 & 0 & 0 & 19 \\
+	   3 & 10 & 0 & 0 & 12 \\
+	   \hline
+	   1 & 100 & 0 & 0 & 18 \\
+	   2 & 100 & 0 & 0 & 11 \\
+	   3 & 100 & 0 & 0 & 12 \\
+	 \hline
+\end{tabular}
+\end{center}
+
+
+\begin{figure}[!h]
+\centering
+\includegraphics[width=15cm]{figures/h_influence.eps}
+\caption{Influence of number of hidden unit on the network convergence. Error on test set in function of number of iterations}    
+\label{h_influence}
+\end{figure}
+
+
+\begin{figure}[!h]%
+    \centering
+    \subfloat[]{{\includegraphics[width=4.5cm]{figures/h1_hyp.eps} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=4.5cm]{figures/h2_hyp.eps} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=4.5cm]{figures/h5_hyp.eps} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=4.5cm]{figures/h7_hyp.eps} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=4.5cm]{figures/h10_hyp.eps} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=4.5cm]{figures/h100_hyp.eps} }}%
+    \qquad
+    \caption{Decision hyperplane for different number of hidden unit: a: 1, b: 2 c: 5, d: 7, e: 10, f:100}%
+    \label{h_hyo}%
+\end{figure}
+
+\clearpage
+
+\section{Image classification with CNN features}
+
+\subsection{Computing CNN features}
+
+\textbf{Q2A1: What is done by the above normalization code and why is it needed?\\}
+
+This normalization code does two things:
+\begin{enumerate}
+\item First it resize the image in order to have homegenous size among image and also I guess to save some time in computation has bigger image cause more computation and we don't have much on our little computer.
+\item Then we "center" our image in a statistical term: we subtract the mean of all images to our images. This allows the optimization to be more effective as it make the update step (in SGD) more significative and prevent situation where the update is small in average  but each update are huge (positively and negatively)
+\end{enumerate}
+
+
+\textbf{Q2A2: Look at the content of variables net and res. What is their structure? What is encoded by net.layers{k} for different values of k? What do values in res(k).x represent for different values of k?}
+
+\subsection{Image classification using CNN features and linear SVM}
+
+\textbf{Q2B1: Report your classification results for the three object classes by including precision-recall plots and AP values into the report. What CNN layers work best as features? Are feature normalization and SVM cross-validation important steps to obtain best results? Motivate your answer by performance numbers. ImageNet dataset contains no person class. Can you connect this fact to the difference in the performance of your person classifiers trained/tested using different layers of CNN output?\\}
+
+\textbf{Q2B2: Compare your best results using CNN features to your results obtained in Assignment 2 for corresponding object classes and training/testing image subsets. What conclusions can you draw? Illustrate a few negative test samples with the highest classification scores (false positives) and a few positive test samples with the lowest classification scores (false negatives) for each class. Can you explain the errors of the classifier?}
+
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+\bibliographystyle{apalike}
+
+\bibliography{sample}
+
+%----------------------------------------------------------------------------------------
+
+
+\end{document}
