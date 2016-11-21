@@ -17,3 +17,5 @@
 
 # graph
 **/shared
+*.mat
+**.mat
