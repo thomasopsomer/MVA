@@ -21,6 +21,7 @@
 
 - TP2: Face Recognition (due to 28/11/2015)
 
+- TP3: Large Scale Graph Learning (due on 12/12/2016)
 
 #### Project (review, or more :) 
 
@@ -32,12 +33,11 @@
 
 ##### Ideas
 
+Learning Graph Embeddings
+
 - DeepWalks (Graph embedding with random walks and skip-gram)
 see [paper](https://arxiv.org/pdf/1403.6652v2.pdf) and [code](https://github.com/phanein/deepwalk)
 
-- Graph Autoencoders with neural networks, contact: (florian.strub@inria.fr)
-
-- Using existing graph to learn a metric enabling to build more distinctive graph.
 
 ## Reinforcement Learning
 
@@ -50,6 +50,7 @@ see [paper](https://arxiv.org/pdf/1403.6652v2.pdf) and [code](https://github.com
 
 - TP2: Q-Learning / Stochastic Bandit algorithms (due for 27/11/2016)
 
+- TP3: Bandit algorithm for Game Theory and RL (due on 20/12/2016)
 
 ## Object recognition and computer vision
 
@@ -70,3 +71,7 @@ see [paper](https://arxiv.org/pdf/1403.6652v2.pdf) and [code](https://github.com
 ## Sparse Representations, Wavelets and Classification
 
 [Course website](http://www.di.ens.fr/~mallat/coursMVA2016.html)
+
+#### Project: Plume
+
+https://challengedata.ens.fr/en/challenge/16/predict_air_quality_at_the_street_level.html

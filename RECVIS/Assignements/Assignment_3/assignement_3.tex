@@ -119,7 +119,7 @@ Then we compute each small partial derivative.
 \frac{\partial \bar{Y}}{\partial B_i}
    = \mathbb 1_{\{W_iX + Bi > 0\}}
 \]
-That leads us to the different composant of the loss gradient:
+That leads us to the different component of the loss gradient:
 
 \[
 \frac{\partial s}{\partial W_i} =
@@ -157,11 +157,21 @@ Consequently we can compute a good numeric approximation of the derivative of $f
 \]
 \textbf{QB2: In your report, choose a training example {X,Y} and report the values of the analytically computed gradients :  grad\_s\_Wi, grad\_s\_Wo, grad\_s\_bi, grad\_s\_bo as well as their numerically computed counterparts: grad\_s\_Wi\_approx, grad\_s\_Wo\_approx, grad\_s\_bi\_approx, grad\_s\_bo\_approx. Are their values similar?\\}
 
+Using the \verb|gradient_nn_approx| function we computed the approximation of gradient using the analytical formal above for a small $\delta$. As some gradient are of dimension $>$ 1, we computed the norm between the approximation and the one computed using backprop. We see that fortunately the values are similar.
+
+\begin{center}
+$|| grad\_s\_Wi\_approx - grad\_s\_Wi ||_{2} =  0.0968$\\
+$|| grad\_s\_Wo\_approx - grad\_s\_Wo ||_{2} = 0.4738$\\
+$|| grad\_s\_bi\_approx - grad\_s\_bi ||_{2} = 0.0546$\\
+$|| grad\_s\_bo\_approx - grad\_s\_bo ||_{2} = 0.00032$
+\end{center}
+
+
 \subsection{Training the network using backpropagation and experimenting with different parameters}
 
 \textbf{QC1: Include the decision hyper-plane visualization and the training and validation error plots in your report. What are the final training and validation errors? After how many iterations did the network converge?\\}
 
-Figure \ref{hyperplane} shows the final decision hyper-plane after 30 iterations over the dataset. Looking at figure \ref{error} showing error evolution on both training and test set, we see that after 10 iteration has reached a good level of convergence. (dataset size is 1000, so one iteration consist of a pass on 1000 datapoint)\\ 
+Figure \ref{hyperplane} shows the final decision hyper-plane after 30 iterations over the dataset. Looking at figure \ref{error} showing error evolution on both training and test set, we see that after 10 iteration has reached a good level of convergence. (dataset size is 1000, so one iteration consist of a pass on 1000 datapoint). The network achieved a full convergence to 0 after 32 iterations.\\ 
 
 \begin{figure}[!h]
 \centering
@@ -182,7 +192,7 @@ Figure \ref{hyperplane} shows the final decision hyper-plane after 30 iterations
 
 \textbf{QC2: Random initializations. Repeat this procedure 5 times from 5 different random initializations. Record for each run the final training and validation errors. Did the network always converge to zero training error?\\}
 
-Here we show in the following table error obtain on 5 different run of the classification algorithm. We see that most of the time the network converges, however to it can get stuck: for instance on the 5th run, it didn't converged and stayed at about 9\% of error in the validation set. 
+Here we show training and validation error obtained on 5 different run of the classification algorithm. We see that most of the time the network converges, however to it can get stuck: for instance on the 5th run, it didn't converged and stayed at about 9\% of error in the validation set. 
 \begin{center}
 \begin{tabular}{ c | c | c }
 	\# run & train error & test error \\
@@ -198,7 +208,7 @@ Here we show in the following table error obtain on 5 different run of the class
 
 \textbf{QC3: Learning rate. Keep h=7 and change the learning rate to values $lrate = {2, 0.2, 0.02, 0.002}$. For each of these values run the training procedure 3 times and observe the training behaviour. For each run and the value of the learning rate report: the final (i) training and (ii) validation errors, and (iii) after how many iterations the network converged (if at all). Visualize the decision hyperplane and the evolution of the training error for each value of the learning (here only one of the three runs is sufficient). Briefly discuss the different behaviour of the training for different learning rates.\\}
 
-The influence of the learning rate is showed on figure \ref{lrate_influence}, and numeric results in the following table. We observe that for learning rate to big or to small the network didn't reach convergence. In big learning rate configuration, we see that the network oscillate between two value, this is due to gradient descent step being to big, we never reach the "hollow of the valley". On the opposite when the learning rate is very small, we don't reach convergence neither. Even if the error is still decreasing, steps are two small, we are never gonna find the minimum. The other value of 0.2 and 0.02, allows the network to converge, however we see that picking the best value (here 0.2) allows to converge much faster (7 iterations rather than 31 iterations), it is much more time and computationally efficient.
+The influence of the learning rate is showed on figure \ref{lrate_influence}, and numeric results in the following table. We observe that for very big or very small learning rate the network didn't reach convergence. In the big learning rate configuration, we see that the network oscillate between two values, this is due to gradient descent step being to big, we never reach the "hollow of the valley". On the opposite when the learning rate is very small, we don't reach convergence neither. Even if the error is still decreasing, steps are two small, we are never gonna find the minimum. The other values of 0.2 and 0.02, allow the network to converge, however we see that picking the best value (here 0.2) allows to converge much faster (7 iterations rather than 31 iterations), it is much more time and computationally efficient.
 
 \begin{figure}[!h]
 \centering
@@ -224,9 +234,9 @@ The influence of the learning rate is showed on figure \ref{lrate_influence}, an
 
 \textbf{QC4: The number of hidden units. Set the learning rate to 0.02 and change the number of hidden units $h = {1, 2, 5, 7, 10, 100}$. For each of these values run the training procedure 3 times and observe the training behaviour. For each run and the value of the number of hidden units record and report: the value of the final (i) training and (ii) validation error, and (iii) after how many iterations the network converged (if at all). Show the plot of the final decision hyperplane for each value of h (only one of the three plots for each h is sufficient). Discuss the different behaviours for the different numbers of hidden units.\\}
 
-Using to few hidden unit doesn't give the freedom to the network to learn correctly the right frontier that split correctly the dataset. Here we seen that we need at least 5 hidden unit to make the model converge.
-Looking at the decision hyperplane for various number (cf figure \ref{h_hyp}) of hidden unit shows that starting at $h = 5$ the decision frontier correctly split the dataset but in a more rectilign fashion, whereas giving the network more hidden unit make it more flexible and round. However we see that the using to much hidden unit doesn't really improve the decision, but make it just smoothier and it may not be worth it to pay too much computation for that.
-Concerning the influence of the number of unit on the convergence speed, we see that hidden layer with many hidden unit seems to converge faster in term of iterations during the first iterations. However using more unit increase the amount computation and consequently slow the learning.
+Using too few hidden unit doesn't give the freedom to the network to learn correctly the right frontier that split correctly the dataset. Here we see that we need at least 5 hidden unit to make the model converge.
+Looking at the decision hyperplane for various number (cf figure \ref{h_hyp}) of hidden unit shows that starting at $h = 5$ the decision frontier correctly split the dataset but in a more rectilign fashion, whereas giving the network more hidden units make it more flexible and round. However we see that  using to much hidden unit doesn't really improve the decision, but make it just smoothier and it may not be worth it to pay as much computation for that.
+Concerning the influence of the number of unit on the convergence speed, we see that hidden layer with many hidden units seems to converge faster in term of iterations during the first iterations. However using more units increase the amount computation and consequently slow the learning because of more parameters to learn.
 
 \begin{center}
 \begin{tabular}{ c | c |  c | c | c }
@@ -283,7 +293,7 @@ Concerning the influence of the number of unit on the convergence speed, we see 
     \subfloat[]{{\includegraphics[width=4.5cm]{figures/h100_hyp.eps} }}%
     \qquad
     \caption{Decision hyperplane for different number of hidden unit: a: 1, b: 2 c: 5, d: 7, e: 10, f:100}%
-    \label{h_hyo}%
+    \label{h_hyp}%
 \end{figure}
 
 \clearpage
@@ -296,18 +306,128 @@ Concerning the influence of the number of unit on the convergence speed, we see 
 
 This normalization code does two things:
 \begin{enumerate}
-\item First it resize the image in order to have homegenous size among image and also I guess to save some time in computation has bigger image cause more computation and we don't have much on our little computer.
-\item Then we "center" our image in a statistical term: we subtract the mean of all images to our images. This allows the optimization to be more effective as it make the update step (in SGD) more significative and prevent situation where the update is small in average  but each update are huge (positively and negatively)
+\item First it resize the image in order to have homogeneous size among image and also I guess to save some time in computation as bigger images cause more computation.
+\item Then we "center" our image in a statistical term: we subtract the mean of all images to our images. During the network training, inputs were centered to allow the optimization to be more effective. Indeed it make the update step (in SGD) more significative and prevent situation where the update is small in average  but each update are huge (positively and negatively). Consequently we need to center our image to be in a situation similar to training.
 \end{enumerate}
 
 
-\textbf{Q2A2: Look at the content of variables net and res. What is their structure? What is encoded by net.layers{k} for different values of k? What do values in res(k).x represent for different values of k?}
+\textbf{Q2A2: Look at the content of variables net and res. What is their structure? What is encoded by net.layers for different values of k? What do values in res(k).x represent for different values of k?\\}
+
+$net$ is a struct with 2 fields: $meta$ and $layers$ and $res$ is an array of struct with several fields also. In net.layers are encoded each layer, each step of the whole convolutional network. For instance in $net.layers\{11\}$ is encoded the fourth convolutional layer, with its size, its, stride, its weights... The structure of $res$ and $net$ are obviously linked: The value $res(k).x$ correspond to the output of the $k-1$ layer of the $net$.
 
 \subsection{Image classification using CNN features and linear SVM}
 
 \textbf{Q2B1: Report your classification results for the three object classes by including precision-recall plots and AP values into the report. What CNN layers work best as features? Are feature normalization and SVM cross-validation important steps to obtain best results? Motivate your answer by performance numbers. ImageNet dataset contains no person class. Can you connect this fact to the difference in the performance of your person classifiers trained/tested using different layers of CNN output?\\}
 
-\textbf{Q2B2: Compare your best results using CNN features to your results obtained in Assignment 2 for corresponding object classes and training/testing image subsets. What conclusions can you draw? Illustrate a few negative test samples with the highest classification scores (false positives) and a few positive test samples with the lowest classification scores (false negatives) for each class. Can you explain the errors of the classifier?}
+We found by cross-validation that a good parameter for C for every classifier is 5. The model wasn't very much sensitive to variation of the C parameter. For very small value it did react quite worst however for value greater than 1, difference wasn't huge. \\
+
+Figure \ref{cnn} shows results (Error on the validation set and top 36 ranked results) on every category for a Linear SVM, using the output of the CNN "fc8" layer as features and using L2-normalization.\\
+
+We have done some experimentation in order to see which features seems more effective and also how normalization is impacting performance. The following two tables show for each class and for each category the Average Precision of the classifier without normalization on the first one and with L2 normalization of the second.
+
+\begin{center}
+\begin{tabular}{ c | c | c |  c }
+	category & soft-max & fc7 & fc8 \\
+	\hline
+	   motorbike &  0.9073 & 0.9007 & 0.9112 \\
+	   person  & 0.9049 & 0.9464 & 0.9376 \\
+	   aeroplane &  0.9422 & 0.9206 & 0.9080 \\
+	 \hline
+\end{tabular}
+\end{center}
+
+
+\begin{center}
+\begin{tabular}{ c | c | c |  c }
+	category & soft-max + L2 & fc7 + L2 & fc8 + L2 \\
+	\hline
+	   motorbike &  0.8805 & 0.9257 & 0.9295 \\
+	   person  & 0.8941  &  0.9541  & 0.9559 \\
+	   aeroplane &  0.9257  &  0.9299  &  0.9395 \\
+	 \hline
+\end{tabular}
+\end{center}
+
+We observe that without normalization, it is hard to choose a single feature as being the best one. Indeed soft-max perform better for aeroplanes but fc7 for person. However using L2-normalization give more credit to the feature coming from the fc8 layer as for each class performance is better using fc8 layer plus normalization. However we see that performance on aeroplane was better using the soft-max layer and no normalzation. Anyway on a general view using L2-normalization seems to make the model more robust and efficient.\\
+
+We also tried using a concatenation of several of these features, but it didn't bring any improvement on test set. Actually the model started to overfit even more, as the AP was 100\% on training data but AP decrease on test data.\\
+
+Our SVM classifier performs well on the class person with a performance of $95.5\%$ using f8 features. Which can be strange given the fact the the ImageNet contains no person class. Actually it could explain the fact that using the soft-max layer couldn't make performance higher than 0.9. Because if the ImageNet doesn't contains person class it mean that the final soft-max layer doesn't know which class to select has to real class doesn't exist and brings more uncertainty and error. On the other hand even if ImageNet contains no person class it does contains many images with people and many classes were people are distinctive part of the images consequently it is normal the network achieved to learn effective representation of people.\\
+
+
+\begin{figure}[!h]%
+    \centering
+    \subfloat[]{{\includegraphics[width=7cm]{figures/Q23/aeroplane_fc8_l2_ap_val.eps} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=7cm]{figures/Q23/aeroplane_fc8_l2_36.jpg} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=7cm]{figures/Q23/person_fc8_l2_ap_val.eps} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=7cm]{figures/Q23/person_fc8_l2_36.jpg} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=7cm]{figures/Q23/motorbike_fc8_l2_ap_val.eps} }}%
+    \qquad
+    \subfloat[]{{\includegraphics[width=7cm]{figures/Q23/motorbike_fc8_l2_36.jpg} }}%
+    \qquad
+    \caption{For each class, result of the Linear SVM, trained on the features extracted from the layer $fc8$ of the Convolution Neural Network. Features are also L2-normalized}%
+    \label{cnn}%
+\end{figure}
+
+
+\textbf{Q2B2: Compare your best results using CNN features to your results obtained in Assignment 2 for corresponding object classes and training/testing image subsets. What conclusions can you draw? Illustrate a few negative test samples with the highest classification scores (false positives) and a few positive test samples with the lowest classification scores (false negatives) for each class. Can you explain the errors of the classifier?\\}
+
+In the assignment 2, we achieved the best results with Fisher Vector using a Hellinger Kernel. The following table compares best results from assignment 2 and assignment 3. We see that improvements are huge. Arguably we can say that features learned in the convolution neural network at each layer are way more efficient, representative and consistent as they overcome some finest hand-builded features like Fisher Vectors in a simple Linear Classifier.
+
+\begin{center}
+\begin{tabular}{ c | c | c}
+	category & Assigment 2 & Assignment 3 \\
+	\hline
+	   motorbike &  0.7825 & 0.9295 \\
+	   person  & 0.7914  &  0.9559 \\
+	   aeroplane &  0.7720  &  0.9395 \\
+	 \hline
+\end{tabular}
+\end{center}
+
+Figures \ref{motorbad}, \ref{personbad}, \ref{aeroplanebad} show the first three false positive and false negative for respectively each classifier.
+
+\begin{enumerate}
+\item Motorbike classifier. We observe that false positive are kind of strange. There is a picture of a boat on a beach, picture inside a building with column and flower, and a bike near a tante. If the bike could be mismatch with a motorbike, result for the first two false positive are very strange and hard to explain. Concerning the false negative, we see that motorbike in them are quite hard to find, they are dispersed within a rich context, or we can see only part of them.
+\item Person classifier. We observe again a strange thing with the picture of the boat at the beach appearing again. But actually those three pictures shows context were it is likely to see a person (inside a car, a chair). Concerning the false negative, here again, picture are very hard to classify even for a human. For instance on the first one, one need to focus to see the litlle head of the person on the coach whose body is hidden.
+\item Aeroplane classifier. Here false positive are more explainable: it mismatches a bird in the sky and a pirogue with a plane, but their form actually are similar to an airplane. False negative are more troubling. There is an old 'sepia' picture that can be hard to deal with for the CNN features, but the other two are simple plane at airport and in the sky.
+\end{enumerate}
+
+
+
+\begin{figure}[!h]%
+    \centering
+    \subfloat[The 3 better ranked false positives]{{\includegraphics[width=15cm]{figures/motorbike_first_false_positive.jpg} }}%
+    \qquad
+    \subfloat[The 3 worst ranked false positive]{{\includegraphics[width=15cm]{figures/motorbike_first_false_negative.jpg} }}%
+    \caption{False positive and false negative for the motorbike classifier.}%
+    \label{motorbad}%
+\end{figure}
+
+
+\begin{figure}[!h]%
+    \centering
+    \subfloat[The 3 better ranked false positives]{{\includegraphics[width=15cm]{figures/person_first_false_positive.jpg} }}%
+    \qquad
+    \subfloat[The 3 worst ranked false positive]{{\includegraphics[width=15cm]{figures/person_first_false_negative.jpg} }}%
+    \caption{False positive and false negative for the person classifier.}%
+    \label{personbad}%
+\end{figure}
+
+\begin{figure}[!h]%
+    \centering
+    \subfloat[The 3 better ranked false positives]{{\includegraphics[width=15cm]{figures/aeroplane_first_false_positive.jpg} }}%
+    \qquad
+    \subfloat[The 3 worst ranked false positive]{{\includegraphics[width=15cm]{figures/aeroplane_first_false_negative.jpg} }}%
+    \caption{False positive and false negative for the aeroplane classifier.}%
+    \label{aeroplanebad}%
+\end{figure}
+
+Finally we see that errors of classifiers are for some easy to explain especially for false negative where we see that the classifier need more training images with more diversity. However some false positive are hard to explain and I guess point out strange features extraction from the CNN.
 
 
 %----------------------------------------------------------------------------------------

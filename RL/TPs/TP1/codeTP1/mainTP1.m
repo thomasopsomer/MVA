@@ -109,3 +109,41 @@ ylabel('||V^* - V_{k}||')
 xlabel('n: Number of iteration')
 
 
+%% Q-Learning
+
+x0 = 1;
+iter = 100;
+epsilon = 0.5;
+T_max = 1000;
+alpha = 0.2;
+
+figure;
+hold on;
+title('Q-learning')
+ylabel('||V^* - V_{k}||')
+xlabel('n: Number of iteration')
+eps = [0.1,0.5,0.9];
+
+for i = 1:numel(eps)
+    [pi, Vstar, Vrec] = Q_learning(x0, iter, eps(i), T_max, G, c_m, c_p, H, price, p_sick, gamma, alpha);
+    diff_inf = [];
+    for k = 1:size(Vrec, 1)
+        diff_inf(k) = abs(max(Vstar - Vrec(k,:)));
+    end
+    plot(1:iter, diff_inf, 'LineWidth', 2)
+end
+legend('epsilon = 0.1','epsilon = 0.5', 'epsilon = 0.9') 
+
+
+% performance in initial state
+[pi, Vstar, Vrec] = Q_learning(x0, iter, epsilon, T_max, G, c_m, c_p, H, price, p_sick, gamma, alpha);
+
+diff_inf = [];
+for k = 1:size(Vrec, 1)
+    diff_inf(k) = abs(Vstar(1) - Vrec(k,1));
+end
+
+plot(1:iter, diff_inf, 'LineWidth', 2)
+title('Q-learning: Performance in the initial state')
+ylabel('||V^*(I) - V_{k}(I)||')
+xlabel('n: Number of iteration')
