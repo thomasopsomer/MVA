@@ -8,6 +8,27 @@
 - Sparse Representations, Wavelets and Classification
 
 
+## Final Projects
+
+
+#### Summary
+
+- Learning Graph Embeddings (*Graph in ML*)
+- Counter Factual Regret Minimization for Extensive Games (*RL*)
+- Joint Representation of Text and Images (*RecVis*)
+- Plume (challengedata) (*Mallat*)
+
+
+#### Deadlines
+
+| Project       | Report deadline  | Pres Deadline        |
+| ------------- |:----------------:| --------------------:|
+| Graphs        | 05 January 2017  | 09 January 2017      |
+| RL            | 10 January 2017  | 17 January 2017      |
+| RecVis        | 16 January 2017  | 9-10-11 January 2017 |
+| Mallat        | ?? February 2017 | ?? February 2017     |
+
+
 ## Graphs in Machine Learning
 
 [Course website](http://researchers.lille.inria.fr/~valko/hp/mva-ml-graphs.php)
@@ -75,3 +96,19 @@ see [paper](https://arxiv.org/pdf/1403.6652v2.pdf) and [code](https://github.com
 #### Project: Plume
 
 https://challengedata.ens.fr/en/challenge/16/predict_air_quality_at_the_street_level.html
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
